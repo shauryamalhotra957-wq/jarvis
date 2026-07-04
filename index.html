@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#02111f" />
+    <title>JARVIS</title>
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="starfield" aria-hidden="true"></canvas>
+      <main class="cockpit" aria-label="JARVIS">
+        <section class="globe-stage" aria-label="Interactive globe">
+          <div id="globeMount" class="globe-mount"></div>
+          <div id="scanSweep" class="scan-sweep" aria-hidden="true"></div>
+          <div class="reticle reticle-a" aria-hidden="true"></div>
+          <div class="reticle reticle-b" aria-hidden="true"></div>
+          <div class="orbital-readout">
+            <span>ORBITAL FEED</span>
+            <strong id="orbitalMode">SATELLITE SWEEP</strong>
+          </div>
+          <div id="worldTooltip" class="world-tooltip" hidden>
+            <span id="tooltipType">NODE</span>
+            <strong id="tooltipTitle">Global node</strong>
+            <p id="tooltipBody">Telemetry ready.</p>
+          </div>
+        </section>
+
+        <aside class="hud-panel left-hud" aria-label="Assistant status">
+          <div class="panel-header">
+            <span class="micro">J.A.R.V.I.S</span>
+            <strong>JARVIS</strong>
+          </div>
+          <div class="vitals-grid">
+            <div><span>CORE</span><strong id="coreState">ONLINE</strong></div>
+            <div><span>GLOBE</span><strong id="globeState">TRACKING</strong></div>
+            <div><span>SAT</span><strong id="satState">ACTIVE</strong></div>
+            <div><span>VOICE</span><strong id="voiceState">STANDBY</strong></div>
+          </div>
+          <div class="telemetry-card" aria-label="Current target lock">
+            <span>TARGET LOCK</span>
+            <strong id="targetReadout">GLOBAL STANDBY</strong>
+            <div class="scan-bar"><i id="scanProgress"></i></div>
+            <small id="scanStatus">Awaiting command stream.</small>
+          </div>
+          <div class="signal-list" id="signalList"></div>
+          <div class="system-stream" id="systemStream" aria-label="Live command stream"></div>
+          <div class="mini-radar" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </div>
+        </aside>
+
+        <aside class="hud-panel right-hud" aria-label="Detailed assistant answer">
+          <div class="panel-header">
+            <span class="micro">ANSWER MATRIX</span>
+            <strong id="answerTitle">Ask me anything, sir.</strong>
+          </div>
+          <p id="answerSummary" class="answer-summary">I can inspect global nodes, focus the globe, run satellite scans, explain future-tech systems, and return structured detail with suggested next actions.</p>
+          <div id="answerSections" class="answer-sections"></div>
+          <div class="confidence-row">
+            <span>Confidence</span>
+            <meter id="confidenceMeter" min="0" max="100" value="88"></meter>
+            <strong id="confidenceText">88%</strong>
+          </div>
+        </aside>
+
+        <div id="jarvisHover" class="jarvis-hover" aria-live="polite">
+          <div class="holo-core"></div>
+          <div>
+            <span>JARVIS RESPONSE</span>
+            <strong id="hoverText">Systems calibrated.</strong>
+          </div>
+        </div>
+
+        <section class="taskbar" aria-label="Assistant taskbar">
+          <button id="reactorButton" class="reactor-button" title="Wake JARVIS">
+            <span class="reactor-core"></span>
+            <span class="sr-only">Wake JARVIS</span>
+          </button>
+          <form id="commandForm" class="command-form">
+            <label class="sr-only" for="commandInput">Ask JARVIS</label>
+            <input id="commandInput" autocomplete="off" value="show me satellite intel over Tokyo" placeholder="Ask: track satellites over India, scan climate risks, show London, explain arc reactor..." />
+            <button class="send-button" type="submit" title="Execute command">EXECUTE</button>
+          </form>
+          <button id="micButton" class="tool-button" title="Voice command">MIC</button>
+          <button id="speakButton" class="tool-button active" title="Toggle voice output">VOICE</button>
+          <div class="quick-chips" aria-label="Quick commands">
+            <button type="button" data-command="run a global satellite scan">Global scan</button>
+            <button type="button" data-command="show me Delhi infrastructure and risk">Delhi</button>
+            <button type="button" data-command="explain cybersecurity threat level">Cyber</button>
+            <button type="button" data-command="focus on Pacific ocean climate signals">Ocean</button>
+          </div>
+          <div class="mode-dock" aria-label="Globe visual mode">
+            <button type="button" class="active" data-mode="earth">EARTH</button>
+            <button type="button" data-mode="night">NIGHT</button>
+            <button type="button" data-mode="tactical">TACTICAL</button>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
