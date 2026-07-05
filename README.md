@@ -81,9 +81,13 @@ npm audit --audit-level=moderate
 jarvis/
   index.html                 App shell and interface markup
   src/
-    main.js                  Three.js scene, globe controls, command UI, animations
-    intelligence.js          Local command interpretation and structured responses
-    globeData.js             Globe targets, telemetry, and regional metadata
+    main.js                  UI events, voice, answer rendering, and app bootstrap
+    globe.js                 Three.js scene, globe controls, Earth shader, and animations
+    core/
+      assistantCore.js       Local command interpretation and structured responses
+      geo.js                 Coordinate parsing and nearest-location helpers
+    data/
+      worldIntel.js          Globe targets, topics, telemetry, and regional metadata
     styles.css               Futuristic UI, responsive layout, motion, accessibility
   public/assets/earth/       Earth and night-lights textures
   tests/                     Node test suite for assistant behavior
