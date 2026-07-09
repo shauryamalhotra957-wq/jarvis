@@ -223,7 +223,7 @@ function drawStarfield() {
       ctx.arc(star.x * canvas.width, star.y * canvas.height, star.r * window.devicePixelRatio, 0, Math.PI * 2);
       ctx.fill();
     }
-    requestAnimationFrame(draw);
+    if (!appState.motionReduced) requestAnimationFrame(draw);
   };
   window.addEventListener("resize", resize);
   draw();
