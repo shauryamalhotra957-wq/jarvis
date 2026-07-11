@@ -82,8 +82,8 @@
             <input id="commandInput" autocomplete="off" value="show me satellite intel over Tokyo" placeholder="Ask: track satellites over India, scan climate risks, show London, explain arc reactor..." />
             <button class="send-button" type="submit" title="Execute command">EXECUTE</button>
           </form>
-          <button id="micButton" class="tool-button" title="Voice command">MIC</button>
-          <button id="speakButton" class="tool-button active" title="Toggle voice output">VOICE</button>
+          <button id="micButton" class="tool-button" title="Voice command" aria-pressed="false">MIC</button>
+          <button id="speakButton" class="tool-button active" title="Toggle voice output" aria-pressed="true">VOICE</button>
           <div class="quick-chips" aria-label="Quick commands">
             <button type="button" data-command="run a global satellite scan">Global scan</button>
             <button type="button" data-command="show me Delhi infrastructure and risk">Delhi</button>
@@ -91,9 +91,9 @@
             <button type="button" data-command="focus on Pacific ocean climate signals">Ocean</button>
           </div>
           <div class="mode-dock" aria-label="Globe visual mode">
-            <button type="button" class="active" data-mode="earth">EARTH</button>
-            <button type="button" data-mode="night">NIGHT</button>
-            <button type="button" data-mode="tactical">TACTICAL</button>
+            <button type="button" class="active" data-mode="earth" aria-pressed="true">EARTH</button>
+            <button type="button" data-mode="night" aria-pressed="false">NIGHT</button>
+            <button type="button" data-mode="tactical" aria-pressed="false">TACTICAL</button>
           </div>
         </section>
       </main>

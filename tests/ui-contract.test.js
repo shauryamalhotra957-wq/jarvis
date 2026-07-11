@@ -26,3 +26,11 @@ test("motion-heavy interface has a reduced-motion path", () => {
   assert.match(main, /appState\.motionReduced/);
   assert.match(styles, /scanSweep/);
 });
+
+test("toggle controls expose pressed state to assistive tech", () => {
+  assert.match(html, /id="speakButton"[^>]*aria-pressed="true"/);
+  assert.match(html, /data-mode="earth"[^>]*aria-pressed="true"/);
+  assert.match(html, /data-mode="night"[^>]*aria-pressed="false"/);
+  assert.match(main, /setAttribute\("aria-pressed", String\(appState\.voiceEnabled\)\)/);
+  assert.match(main, /setAttribute\("aria-pressed", String\(active\)\)/);
+});

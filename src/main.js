@@ -180,14 +180,17 @@ function setupSpeechRecognition() {
   recognition.onstart = () => {
     elements.voiceState.textContent = "LISTENING";
     elements.micButton.classList.add("active");
+    elements.micButton.setAttribute("aria-pressed", "true");
   };
   recognition.onend = () => {
     elements.voiceState.textContent = "STANDBY";
     elements.micButton.classList.remove("active");
+    elements.micButton.setAttribute("aria-pressed", "false");
   };
   recognition.onerror = () => {
     elements.voiceState.textContent = "BLOCKED";
     elements.micButton.classList.remove("active");
+    elements.micButton.setAttribute("aria-pressed", "false");
   };
   recognition.onresult = (event) => {
     const transcript = event.results?.[0]?.[0]?.transcript || "";
@@ -239,6 +242,7 @@ function bindEvents() {
   elements.speakButton.addEventListener("click", () => {
     appState.voiceEnabled = !appState.voiceEnabled;
     elements.speakButton.classList.toggle("active", appState.voiceEnabled);
+    elements.speakButton.setAttribute("aria-pressed", String(appState.voiceEnabled));
     elements.speakButton.textContent = appState.voiceEnabled ? "VOICE" : "MUTE";
   });
   document.querySelectorAll("[data-command]").forEach((button) => {
@@ -250,7 +254,11 @@ function bindEvents() {
   elements.modeButtons.forEach((button) => {
     button.addEventListener("click", () => {
       const mode = button.dataset.mode;
-      elements.modeButtons.forEach((item) => item.classList.toggle("active", item === button));
+      elements.modeButtons.forEach((item) => {
+        const active = item === button;
+        item.classList.toggle("active", active);
+        item.setAttribute("aria-pressed", String(active));
+      });
       document.body.dataset.globeMode = mode;
       appState.globe.setVisualMode(mode);
       pushStream("VISUAL MODE", `${mode.toUpperCase()} renderer engaged.`, mode === "night" ? "violet" : "cyan");
