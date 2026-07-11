@@ -47,7 +47,8 @@ export function parseCoordinates(query) {
   const latMatch = text.match(/lat(?:itude)?\s*[:=]?\s*(-?\d+(?:\.\d+)?)/);
   const lonMatch = text.match(/(?:lon|lng|longitude)\s*[:=]?\s*(-?\d+(?:\.\d+)?)/);
   if (!latMatch || !lonMatch) return null;
-  const lat = clamp(Number(latMatch[1]), -90, 90);
-  const lon = clamp(Number(lonMatch[1]), -180, 180);
+  const lat = Number(latMatch[1]);
+  const lon = Number(lonMatch[1]);
+  if (!validCoordinate({ lat, lon })) return null;
   return { lat, lon };
 }

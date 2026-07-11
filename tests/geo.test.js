@@ -23,6 +23,11 @@ test("parseCoordinates extracts latitude and longitude", () => {
   assert.deepEqual(parseCoordinates("scan lat 40.7 lon -74.0"), { lat: 40.7, lon: -74 });
 });
 
+test("parseCoordinates rejects out-of-range coordinates", () => {
+  assert.equal(parseCoordinates("scan lat 120 lon -74.0"), null);
+  assert.equal(parseCoordinates("scan lat 40.7 lon 240"), null);
+});
+
 test("distanceKm returns a plausible long-distance value", () => {
   const km = distanceKm({ lat: 51.5072, lon: -0.1276 }, { lat: 40.7128, lon: -74.006 });
   assert.ok(km > 5500 && km < 5700);
