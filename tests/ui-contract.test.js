@@ -34,3 +34,9 @@ test("toggle controls expose pressed state to assistive tech", () => {
   assert.match(main, /setAttribute\("aria-pressed", String\(appState\.voiceEnabled\)\)/);
   assert.match(main, /setAttribute\("aria-pressed", String\(active\)\)/);
 });
+
+test("dynamic status regions announce command updates", () => {
+  assert.match(html, /id="scanStatus"[^>]*aria-live="polite"/);
+  assert.match(html, /id="systemStream"[^>]*aria-live="polite"/);
+  assert.match(html, /id="systemStream"[^>]*aria-relevant="additions text"/);
+});

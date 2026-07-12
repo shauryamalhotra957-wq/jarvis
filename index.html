@@ -41,10 +41,10 @@
             <span>TARGET LOCK</span>
             <strong id="targetReadout">GLOBAL STANDBY</strong>
             <div class="scan-bar"><i id="scanProgress"></i></div>
-            <small id="scanStatus">Awaiting command stream.</small>
+            <small id="scanStatus" aria-live="polite">Awaiting command stream.</small>
           </div>
           <div class="signal-list" id="signalList"></div>
-          <div class="system-stream" id="systemStream" aria-label="Live command stream"></div>
+          <div class="system-stream" id="systemStream" aria-label="Live command stream" aria-live="polite" aria-relevant="additions text"></div>
           <div class="mini-radar" aria-hidden="true">
             <span></span><span></span><span></span>
           </div>
