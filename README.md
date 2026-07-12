@@ -6,6 +6,15 @@ The project is designed to feel like an advanced mission-control assistant: ask 
 
 ![JARVIS polished desktop interface](docs/screenshots/jarvis-polished-desktop.png)
 
+## Project Snapshot
+
+| Area | Detail |
+| --- | --- |
+| Experience | Full-screen cinematic assistant UI with interactive Earth |
+| Core system | Three.js globe, local command parser, target focusing, telemetry overlays |
+| Design signal | Verified desktop, command-lock, and mobile screenshots |
+| Quality signal | Node test suite, production build validation, security notes |
+
 ## Repository Description
 
 **GitHub description:** Futuristic JARVIS-style AI assistant UI with a high-resolution Three.js Earth, satellite targeting, glowing arc-reactor command orb, voice commands, tests, docs, and production-ready upgrade notes.
