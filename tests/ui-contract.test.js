@@ -24,6 +24,8 @@ test("visual modes are wired into the globe renderer", () => {
 test("motion-heavy interface has a reduced-motion path", () => {
   assert.match(styles, /prefers-reduced-motion:\s*reduce/);
   assert.match(main, /appState\.motionReduced/);
+  assert.match(globe, /this\.motionReduced/);
+  assert.match(globe, /prefers-reduced-motion:\s*reduce/);
   assert.match(styles, /scanSweep/);
 });
 

@@ -225,6 +225,7 @@ export class JarvisGlobe {
     this.focusRotation = null;
     this.scanVelocity = 0.07;
     this.pulse = 0;
+    this.motionReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     this.setupScene();
     this.setupEvents();
@@ -348,6 +349,9 @@ export class JarvisGlobe {
 
   setupEvents() {
     window.addEventListener("resize", () => this.resize());
+    window.matchMedia("(prefers-reduced-motion: reduce)").addEventListener("change", (event) => {
+      this.motionReduced = event.matches;
+    });
     this.renderer.domElement.addEventListener("pointermove", (event) => this.onPointerMove(event));
     this.renderer.domElement.addEventListener("click", (event) => this.onPointerClick(event));
   }
@@ -461,17 +465,23 @@ export class JarvisGlobe {
   animate() {
     const delta = this.clock.getDelta();
     const elapsed = this.clock.elapsedTime;
-    if (this.focusRotation) {
+    if (this.motionReduced && this.focusRotation) {
+      this.group.rotation.set(this.focusRotation.x, this.focusRotation.y, 0);
+    } else if (this.focusRotation) {
       this.group.rotation.x = THREE.MathUtils.damp(this.group.rotation.x, this.focusRotation.x, 3.5, delta);
       this.group.rotation.y = dampAngle(this.group.rotation.y, this.focusRotation.y, 3.5, delta);
-    } else {
+    } else if (!this.motionReduced) {
       this.group.rotation.x = THREE.MathUtils.damp(this.group.rotation.x, 0, 2.2, delta);
       this.group.rotation.y += delta * this.scanVelocity;
     }
-    this.clouds.rotation.y += delta * 0.045;
+    if (!this.motionReduced) this.clouds.rotation.y += delta * 0.045;
     this.markerGroup.rotation.copy(this.group.rotation);
-    this.updateSatellite(elapsed);
-    this.updateFocusLock(elapsed);
+    if (this.motionReduced) {
+      this.updateSatellite(0);
+    } else {
+      this.updateSatellite(elapsed);
+      this.updateFocusLock(elapsed);
+    }
     if (this.pulse > 0) this.pulse *= 0.96;
     this.controls.update();
     this.renderer.render(this.scene, this.camera);
