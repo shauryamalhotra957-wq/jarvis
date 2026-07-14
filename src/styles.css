@@ -251,6 +251,71 @@ body.is-executing .scan-sweep {
     rgba(1, 15, 28, 0.62);
 }
 
+.memory-deck {
+  display: grid;
+  gap: 0.55rem;
+  margin-bottom: 0.85rem;
+  padding: 0.8rem;
+  border: 1px solid rgba(77, 243, 255, 0.16);
+  background:
+    linear-gradient(135deg, rgba(168, 140, 255, 0.12), transparent 42%),
+    rgba(1, 15, 28, 0.62);
+}
+
+.memory-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.memory-head span,
+.memory-list span {
+  color: var(--cyan);
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.memory-head strong {
+  color: var(--white);
+  font-size: 0.8rem;
+}
+
+.memory-list {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.memory-list button {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.55rem;
+  align-items: center;
+  min-height: 2.4rem;
+  border: 1px solid rgba(77, 243, 255, 0.14);
+  background: rgba(0, 10, 20, 0.52);
+  color: var(--white);
+  cursor: pointer;
+  text-align: left;
+}
+
+.memory-list button:hover,
+.memory-list button:focus-visible {
+  border-color: rgba(255, 207, 110, 0.42);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+.memory-list strong {
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 0.76rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .telemetry-card span,
 .telemetry-card small,
 .stream-item span {
@@ -451,6 +516,45 @@ meter {
 .taskbar:hover {
   border-color: rgba(77, 243, 255, 0.46);
   transform: translateY(-1px);
+}
+
+.boot-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  background:
+    repeating-linear-gradient(90deg, rgba(77, 243, 255, 0.11) 0 1px, transparent 1px 22px),
+    #020a12;
+  pointer-events: none;
+  animation: bootVeil 1700ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.boot-veil > div {
+  width: min(34rem, calc(100vw - 2rem));
+  border: 1px solid rgba(77, 243, 255, 0.36);
+  padding: 1rem;
+  background: rgba(4, 20, 34, 0.88);
+  box-shadow: 0 0 54px rgba(77, 243, 255, 0.2);
+  clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px));
+  animation: bootCard 1050ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.boot-veil span {
+  color: var(--cyan);
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.boot-veil strong {
+  display: block;
+  margin-top: 0.45rem;
+  color: var(--white);
+  font-size: clamp(1.6rem, 4vw, 3.2rem);
+  line-height: 1;
 }
 
 .reactor-button {
@@ -678,6 +782,17 @@ body[data-globe-mode="tactical"] .mode-dock button.active {
 @keyframes streamIn {
   from { opacity: 0; transform: translateX(-0.4rem); }
   to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes bootVeil {
+  0% { opacity: 1; visibility: visible; }
+  72% { opacity: 1; }
+  100% { opacity: 0; visibility: hidden; }
+}
+
+@keyframes bootCard {
+  from { opacity: 0; transform: translateY(1rem) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 @media (max-width: 1180px) {

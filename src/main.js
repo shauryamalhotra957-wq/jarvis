@@ -20,6 +20,7 @@ const elements = {
   speakButton: document.querySelector("#speakButton"),
   signalList: document.querySelector("#signalList"),
   systemStream: document.querySelector("#systemStream"),
+  memoryDeck: document.querySelector("#memoryDeck"),
   targetReadout: document.querySelector("#targetReadout"),
   scanProgress: document.querySelector("#scanProgress"),
   scanStatus: document.querySelector("#scanStatus"),
@@ -37,6 +38,7 @@ const appState = {
   recognition: null,
   globe: null,
   stream: [],
+  commandHistory: ["show me satellite intel over Tokyo"],
   scanFrame: null,
   motionReduced: window.matchMedia("(prefers-reduced-motion: reduce)").matches
 };
@@ -70,6 +72,20 @@ function pushStream(label, detail, tone = "cyan") {
           <strong>${escapeHtml(entry.label)}</strong>
           <p>${escapeHtml(entry.detail)}</p>
         </article>
+      `
+    )
+    .join("");
+}
+
+function renderCommandMemory() {
+  elements.memoryDeck.innerHTML = appState.commandHistory
+    .slice(0, 4)
+    .map(
+      (command, index) => `
+        <button type="button" data-memory-command="${escapeHtml(command)}">
+          <span>0${index + 1}</span>
+          <strong>${escapeHtml(command)}</strong>
+        </button>
       `
     )
     .join("");
@@ -157,6 +173,8 @@ function executeCommand(command, options = {}) {
   const finalCommand = command?.trim() || appState.lastCommand;
   if (!finalCommand) return;
   appState.lastCommand = finalCommand;
+  appState.commandHistory = [finalCommand, ...appState.commandHistory.filter((item) => item !== finalCommand)].slice(0, 4);
+  renderCommandMemory();
   elements.input.value = finalCommand;
   elements.reactorButton.classList.add("wake");
   window.setTimeout(() => elements.reactorButton.classList.remove("wake"), 950);
@@ -251,6 +269,11 @@ function bindEvents() {
       executeCommand(button.dataset.command);
     });
   });
+  elements.memoryDeck.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-memory-command]");
+    if (!button) return;
+    executeCommand(button.dataset.memoryCommand);
+  });
   elements.modeButtons.forEach((button) => {
     button.addEventListener("click", () => {
       const mode = button.dataset.mode;
@@ -285,6 +308,7 @@ function init() {
   document.body.dataset.globeMode = "earth";
   drawStarfield();
   renderSignals();
+  renderCommandMemory();
   pushStream("BOOT", "JARVIS interface mounted. Reactor channel ready.", "green");
   appState.globe = new JarvisGlobe(elements.mount, elements.tooltip);
   setupSpeechRecognition();
