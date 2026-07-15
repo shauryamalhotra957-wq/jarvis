@@ -146,6 +146,15 @@ function speak(text) {
   window.speechSynthesis.speak(utterance);
 }
 
+function setupSpeechOutput() {
+  if ("speechSynthesis" in window) return;
+  appState.voiceEnabled = false;
+  elements.speakButton.disabled = true;
+  elements.speakButton.classList.remove("active");
+  elements.speakButton.setAttribute("aria-pressed", "false");
+  elements.speakButton.textContent = "NO VOICE";
+}
+
 function renderAnswer(answer) {
   elements.answerTitle.textContent = answer.title;
   elements.answerSummary.textContent = answer.summary;
@@ -217,16 +226,33 @@ function setupSpeechRecognition() {
     elements.micButton.classList.remove("active");
     elements.micButton.setAttribute("aria-pressed", "false");
   };
-  recognition.onerror = () => {
-    elements.voiceState.textContent = "BLOCKED";
+  recognition.onerror = (event) => {
+    const blocked = ["not-allowed", "service-not-allowed"].includes(event.error);
+    elements.voiceState.textContent = event.error === "aborted" ? "STANDBY" : blocked ? "BLOCKED" : "ERROR";
     elements.micButton.classList.remove("active");
     elements.micButton.setAttribute("aria-pressed", "false");
+    if (event.error !== "aborted") {
+      pushStream("VOICE ERROR", event.error || "Speech recognition failed.", "amber");
+    }
   };
   recognition.onresult = (event) => {
     const transcript = event.results?.[0]?.[0]?.transcript || "";
     executeCommand(transcript);
   };
   appState.recognition = recognition;
+}
+
+function toggleSpeechRecognition() {
+  if (!appState.recognition) return;
+  if (elements.micButton.getAttribute("aria-pressed") === "true") {
+    appState.recognition.stop();
+    return;
+  }
+  try {
+    appState.recognition.start();
+  } catch {
+    elements.voiceState.textContent = "BUSY";
+  }
 }
 
 function drawStarfield() {
@@ -268,9 +294,10 @@ function bindEvents() {
     executeCommand(elements.input.value);
   });
   elements.reactorButton.addEventListener("click", () => executeCommand(appState.lastCommand, { includeBootSignals: true }));
-  elements.micButton.addEventListener("click", () => appState.recognition?.start());
+  elements.micButton.addEventListener("click", toggleSpeechRecognition);
   elements.speakButton.addEventListener("click", () => {
     appState.voiceEnabled = !appState.voiceEnabled;
+    if (!appState.voiceEnabled) window.speechSynthesis.cancel();
     elements.speakButton.classList.toggle("active", appState.voiceEnabled);
     elements.speakButton.setAttribute("aria-pressed", String(appState.voiceEnabled));
     elements.speakButton.textContent = appState.voiceEnabled ? "VOICE" : "MUTE";
@@ -324,6 +351,7 @@ function init() {
   renderCommandMemory();
   pushStream("BOOT", "JARVIS interface mounted. Reactor channel ready.", "green");
   appState.globe = new JarvisGlobe(elements.mount, elements.tooltip);
+  setupSpeechOutput();
   setupSpeechRecognition();
   bindEvents();
   renderAnswer(bootAnswer());

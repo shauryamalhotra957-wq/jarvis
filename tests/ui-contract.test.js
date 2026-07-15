@@ -53,3 +53,11 @@ test("command memory is restored and persisted locally", () => {
   assert.match(main, /saveCommandHistory\(storage/);
   assert.match(main, /elements\.input\.value = appState\.lastCommand/);
 });
+
+test("speech controls handle unavailable and repeated interactions", () => {
+  assert.match(main, /elements\.speakButton\.disabled = true/);
+  assert.match(main, /function toggleSpeechRecognition/);
+  assert.match(main, /appState\.recognition\.stop\(\)/);
+  assert.match(main, /speechSynthesis\.cancel\(\)/);
+  assert.match(main, /VOICE ERROR/);
+});
