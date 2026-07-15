@@ -22,6 +22,12 @@
   box-sizing: border-box;
 }
 
+html {
+  background: var(--bg);
+  color-scheme: dark;
+  scrollbar-color: rgba(77, 243, 255, 0.42) var(--bg);
+}
+
 body {
   margin: 0;
   min-width: 320px;
@@ -31,6 +37,16 @@ body {
     radial-gradient(circle at 50% 48%, rgba(19, 122, 255, 0.2), transparent 32%),
     radial-gradient(circle at 20% 18%, rgba(77, 243, 255, 0.1), transparent 24%),
     #020a12;
+}
+
+body::-webkit-scrollbar {
+  width: 0.55rem;
+  background: var(--bg);
+}
+
+body::-webkit-scrollbar-thumb {
+  border: 2px solid var(--bg);
+  background: rgba(77, 243, 255, 0.48);
 }
 
 button,
@@ -480,15 +496,15 @@ body.is-executing .scan-sweep {
 }
 
 .confidence-row {
-  position: sticky;
-  bottom: 0;
+  position: relative;
+  bottom: auto;
   display: grid;
   grid-template-columns: auto 1fr auto;
   gap: 0.7rem;
   align-items: center;
   margin-top: 1rem;
   padding: 0.8rem 0 0;
-  background: linear-gradient(to top, rgba(3, 14, 25, 0.96), rgba(3, 14, 25, 0));
+  background: linear-gradient(to right, rgba(77, 243, 255, 0.06), transparent);
 }
 
 meter {
