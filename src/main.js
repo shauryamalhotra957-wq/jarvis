@@ -77,6 +77,8 @@ const appState = {
   speaking: false,
   wakeRestartTimer: null,
   wakeSleepTimer: null,
+  desktopBridge: false,
+  desktopEvents: null,
   scanFrame: null,
   motionReduced: window.matchMedia("(prefers-reduced-motion: reduce)").matches
 };
@@ -110,7 +112,7 @@ function renderPersonalState() {
   elements.wakeButton.textContent = armed ? "DISARM" : "ARM JARVIS";
   elements.portalArmButton.setAttribute("aria-pressed", String(armed));
   elements.portalArmButton.textContent = armed ? "DISARM WAKE CHANNEL" : "ARM WAKE CHANNEL";
-  elements.privacyState.textContent = armed ? "LOCAL MIC ARMED" : "MIC OFF";
+  elements.privacyState.textContent = appState.desktopBridge ? "DESKTOP WAKE READY" : armed ? "LOCAL MIC ARMED" : "MIC OFF";
   elements.privacyState.dataset.armed = String(armed);
   elements.memoryCount.textContent = `${appState.personalMemory.length} NOTE${appState.personalMemory.length === 1 ? "" : "S"}`;
 }
@@ -141,6 +143,30 @@ function wakeInterface(message = "At your service.", transcript = "VOICE PRINT A
   if (appState.wakeState.armed) {
     appState.wakeSleepTimer = window.setTimeout(sleepInterface, 18_000);
   }
+}
+
+function activateDesktopWake() {
+  wakeInterface("Desktop wake phrase accepted. Personal intelligence matrix online.", "HEY JARVIS DETECTED");
+  pushStream("DESKTOP WAKE", "Local companion requested foreground activation.", "green");
+  elements.input.focus();
+  speak("At your service.");
+}
+
+function setupDesktopWakeBridge() {
+  const parameters = new URLSearchParams(window.location.search);
+  if (parameters.get("desktop") !== "1") return;
+  appState.desktopBridge = true;
+  document.body.dataset.desktop = "true";
+  renderPersonalState();
+  if (parameters.get("wake") === "1") window.setTimeout(activateDesktopWake, 1_850);
+  if (!("EventSource" in window)) return;
+  const events = new EventSource("/api/wake/events");
+  events.addEventListener("wake", activateDesktopWake);
+  events.addEventListener("open", () => {
+    elements.privacyState.textContent = "DESKTOP WAKE READY";
+  });
+  appState.desktopEvents = events;
+  window.addEventListener("beforeunload", () => events.close(), { once: true });
 }
 
 function renderSignals() {
@@ -550,6 +576,7 @@ function init() {
   bindEvents();
   renderAnswer(bootAnswer());
   elements.missionState.textContent = "STANDBY";
+  setupDesktopWakeBridge();
 }
 
 init();

@@ -82,3 +82,10 @@ test("personal intelligence and privacy state are visible in the HUD", () => {
   assert.match(styles, /\.privacy-strip/);
   assert.match(styles, /\.action-ribbon/);
 });
+
+test("desktop wake bridge can foreground the dormant interface", () => {
+  assert.match(main, /new EventSource\("\/api\/wake\/events"\)/);
+  assert.match(main, /activateDesktopWake/);
+  assert.match(main, /parameters\.get\("desktop"\) !== "1"/);
+  assert.match(main, /DESKTOP WAKE READY/);
+});

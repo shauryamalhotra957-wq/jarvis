@@ -10,6 +10,8 @@
     "start": "vite --host 127.0.0.1 --port 4373",
     "dev": "vite --host 127.0.0.1 --port 4373",
     "build": "vite build",
+    "desktop:serve": "node desktop/server.mjs",
+    "desktop": "npm run build && npm run desktop:serve",
     "test": "node --test tests/*.test.js",
     "validate": "npm run test && npm run build"
   },
