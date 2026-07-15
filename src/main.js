@@ -1,7 +1,18 @@
 import "./styles.css";
 import { answerQuery, bootAnswer } from "./core/assistantCore.js";
+import { addCommand, loadCommandHistory, saveCommandHistory } from "./core/commandHistory.js";
 import { startupSignals } from "./data/worldIntel.js";
 import { JarvisGlobe } from "./globe.js";
+
+const DEFAULT_COMMAND = "show me satellite intel over Tokyo";
+const storage = (() => {
+  try {
+    return window.localStorage;
+  } catch {
+    return null;
+  }
+})();
+const initialCommandHistory = loadCommandHistory(storage, [DEFAULT_COMMAND]);
 
 const elements = {
   mount: document.querySelector("#globeMount"),
@@ -33,12 +44,12 @@ const elements = {
 };
 
 const appState = {
-  lastCommand: "show me satellite intel over Tokyo",
+  lastCommand: initialCommandHistory[0] || DEFAULT_COMMAND,
   voiceEnabled: true,
   recognition: null,
   globe: null,
   stream: [],
-  commandHistory: ["show me satellite intel over Tokyo"],
+  commandHistory: initialCommandHistory,
   scanFrame: null,
   motionReduced: window.matchMedia("(prefers-reduced-motion: reduce)").matches
 };
@@ -173,7 +184,8 @@ function executeCommand(command, options = {}) {
   const finalCommand = command?.trim() || appState.lastCommand;
   if (!finalCommand) return;
   appState.lastCommand = finalCommand;
-  appState.commandHistory = [finalCommand, ...appState.commandHistory.filter((item) => item !== finalCommand)].slice(0, 4);
+  appState.commandHistory = addCommand(appState.commandHistory, finalCommand);
+  saveCommandHistory(storage, appState.commandHistory);
   renderCommandMemory();
   elements.input.value = finalCommand;
   elements.reactorButton.classList.add("wake");
@@ -306,6 +318,7 @@ function bindEvents() {
 
 function init() {
   document.body.dataset.globeMode = "earth";
+  elements.input.value = appState.lastCommand;
   drawStarfield();
   renderSignals();
   renderCommandMemory();

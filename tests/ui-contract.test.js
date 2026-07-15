@@ -42,3 +42,9 @@ test("dynamic status regions announce command updates", () => {
   assert.match(html, /id="systemStream"[^>]*aria-live="polite"/);
   assert.match(html, /id="systemStream"[^>]*aria-relevant="additions text"/);
 });
+
+test("command memory is restored and persisted locally", () => {
+  assert.match(main, /loadCommandHistory\(storage/);
+  assert.match(main, /saveCommandHistory\(storage/);
+  assert.match(main, /elements\.input\.value = appState\.lastCommand/);
+});
