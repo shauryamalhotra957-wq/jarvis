@@ -5,8 +5,10 @@ const STOP_WORDS = new Set(["the", "and", "about", "show", "tell", "give", "me",
 
 export function normalizeQuery(query) {
   return String(query || "")
+    .normalize("NFKD")
+    .replace(/\p{M}/gu, "")
     .toLowerCase()
-    .replace(/[^a-z0-9\s.-]/g, " ")
+    .replace(/[^\p{L}\p{N}\s.-]/gu, " ")
     .replace(/\s+/g, " ")
     .trim();
 }
