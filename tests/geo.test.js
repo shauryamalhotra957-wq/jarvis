@@ -23,9 +23,16 @@ test("parseCoordinates extracts latitude and longitude", () => {
   assert.deepEqual(parseCoordinates("scan lat 40.7 lon -74.0"), { lat: 40.7, lon: -74 });
 });
 
+test("parseCoordinates accepts comma-separated and hemisphere formats", () => {
+  assert.deepEqual(parseCoordinates("scan 40.7, -74.0"), { lat: 40.7, lon: -74 });
+  assert.deepEqual(parseCoordinates("scan 40.7 N, 74.0 W"), { lat: 40.7, lon: -74 });
+  assert.deepEqual(parseCoordinates("latitude 33.9 S longitude 151.2 E"), { lat: -33.9, lon: 151.2 });
+});
+
 test("parseCoordinates rejects out-of-range coordinates", () => {
   assert.equal(parseCoordinates("scan lat 120 lon -74.0"), null);
   assert.equal(parseCoordinates("scan lat 40.7 lon 240"), null);
+  assert.equal(parseCoordinates("scan 120, -74.0"), null);
 });
 
 test("distanceKm returns a plausible long-distance value", () => {

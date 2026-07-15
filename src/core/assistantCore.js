@@ -32,7 +32,7 @@ export function scoreTokens(tokens, candidateTerms, query = "") {
 
 export function findLocation(query) {
   const normalized = normalizeQuery(query);
-  const coordinate = parseCoordinates(normalized);
+  const coordinate = parseCoordinates(query);
   if (coordinate) {
     const nearest = nearestLocation(coordinate.lat, coordinate.lon);
     return {
@@ -148,7 +148,7 @@ function globalScanAnswer(query) {
 
 export function answerQuery(query, options = {}) {
   const normalized = normalizeQuery(query);
-  const location = findLocation(normalized);
+  const location = findLocation(query);
   const topic = findTopic(normalized);
   const wantsSatellite = /\b(satellite|orbit|scan|track|pointer|iss|landsat|sentinel)\b/i.test(normalized);
 

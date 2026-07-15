@@ -42,13 +42,29 @@ export function nearestLocation(lat, lon, candidates = locations) {
     .sort((a, b) => a.km - b.km)[0];
 }
 
+function signedCoordinate(value, hemisphere) {
+  const coordinate = Number(value);
+  if (!hemisphere) return coordinate;
+  return Math.abs(coordinate) * (/[sw]/i.test(hemisphere) ? -1 : 1);
+}
+
 export function parseCoordinates(query) {
   const text = String(query || "").toLowerCase();
-  const latMatch = text.match(/lat(?:itude)?\s*[:=]?\s*(-?\d+(?:\.\d+)?)/);
-  const lonMatch = text.match(/(?:lon|lng|longitude)\s*[:=]?\s*(-?\d+(?:\.\d+)?)/);
-  if (!latMatch || !lonMatch) return null;
-  const lat = Number(latMatch[1]);
-  const lon = Number(lonMatch[1]);
+  const latMatch = text.match(/lat(?:itude)?\s*[:=]?\s*([+-]?\d+(?:\.\d+)?)\s*°?\s*([ns])?/);
+  const lonMatch = text.match(/(?:lon|lng|longitude)\s*[:=]?\s*([+-]?\d+(?:\.\d+)?)\s*°?\s*([ew])?/);
+
+  let lat;
+  let lon;
+  if (latMatch && lonMatch) {
+    lat = signedCoordinate(latMatch[1], latMatch[2]);
+    lon = signedCoordinate(lonMatch[1], lonMatch[2]);
+  } else {
+    const pair = text.match(/([+-]?\d+(?:\.\d+)?)\s*°?\s*([ns])?\s*[,/]\s*([+-]?\d+(?:\.\d+)?)\s*°?\s*([ew])?/);
+    if (!pair) return null;
+    lat = signedCoordinate(pair[1], pair[2]);
+    lon = signedCoordinate(pair[3], pair[4]);
+  }
+
   if (!validCoordinate({ lat, lon })) return null;
   return { lat, lon };
 }
