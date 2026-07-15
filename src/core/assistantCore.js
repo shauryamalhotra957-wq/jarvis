@@ -67,6 +67,15 @@ export function findTopic(query) {
   return ranked[0]?.score > 0 ? ranked[0].topic : null;
 }
 
+export function selectSatellite(query, candidates = satellites) {
+  if (!candidates.length) return null;
+  let hash = 2166136261;
+  for (const character of normalizeQuery(query)) {
+    hash = Math.imul(hash ^ character.codePointAt(0), 16777619);
+  }
+  return candidates[(hash >>> 0) % candidates.length];
+}
+
 function locationAnswer(location, topic) {
   const detailTopic = topic ? ` ${topic.title.toLowerCase()} overlay` : "";
   return {
@@ -160,7 +169,7 @@ export function answerQuery(query, options = {}) {
   else answer = globalScanAnswer(normalized);
 
   if (wantsSatellite) {
-    const satellite = satellites[Math.abs(normalized.length) % satellites.length];
+    const satellite = selectSatellite(normalized);
     answer.sections = [
       {
         heading: "Satellite pointer",

@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { answerQuery, bootAnswer, findLocation, findTopic, normalizeQuery, tokenize } from "../src/core/assistantCore.js";
+import { answerQuery, bootAnswer, findLocation, findTopic, normalizeQuery, selectSatellite, tokenize } from "../src/core/assistantCore.js";
 
 test("normalizeQuery folds accents without discarding international letters", () => {
   assert.equal(normalizeQuery("São Paulo — météo"), "sao paulo meteo");
@@ -19,6 +19,12 @@ test("findLocation matches city and region aliases", () => {
 
 test("findTopic matches cybersecurity commands", () => {
   assert.equal(findTopic("explain ransomware cybersecurity threat").id, "cybersecurity");
+});
+
+test("selectSatellite is stable and uses command content", () => {
+  const candidates = ["alpha", "bravo", "charlie", "delta", "echo", "foxtrot", "golf"];
+  assert.equal(selectSatellite("track iss", candidates), selectSatellite("track iss", candidates));
+  assert.notEqual(selectSatellite("track iss", candidates), selectSatellite("scan moon", candidates));
 });
 
 test("answerQuery combines location and satellite mode", () => {
