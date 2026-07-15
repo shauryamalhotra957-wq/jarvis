@@ -185,3 +185,7 @@ To turn this prototype into a real desktop JARVIS:
 ## License
 
 This project is currently marked `UNLICENSED` in `package.json`. Add a license before accepting external contributions or reuse.
+
+## Experience Design
+
+The cinematic command interface follows the repository's [JARVIS design system](design-system/jarvis/MASTER.md), including keyboard-visible focus, 44px interaction targets, responsive HUD composition, and reduced-motion behavior.
