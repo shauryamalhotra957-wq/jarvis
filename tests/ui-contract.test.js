@@ -61,3 +61,24 @@ test("speech controls handle unavailable and repeated interactions", () => {
   assert.match(main, /speechSynthesis\.cancel\(\)/);
   assert.match(main, /VOICE ERROR/);
 });
+
+test("wake portal exposes manual and voice activation paths", () => {
+  assert.match(html, /id="wakePortal"/);
+  assert.match(html, /id="portalArmButton"/);
+  assert.match(html, /id="portalEnterButton"/);
+  assert.match(html, /id="wakeButton"[^>]*aria-pressed="false"/);
+  assert.match(main, /reduceWakeState/);
+  assert.match(main, /startRecognition\("wake"\)/);
+  assert.match(styles, /body\.jarvis-dormant \.wake-portal/);
+  assert.match(styles, /body\.jarvis-awake \.cockpit/);
+});
+
+test("personal intelligence and privacy state are visible in the HUD", () => {
+  assert.match(html, /id="privacyState"/);
+  assert.match(html, /id="memoryCount"/);
+  assert.match(html, /id="localClock"/);
+  assert.match(main, /routePersonalCommand/);
+  assert.match(main, /savePersonalMemory/);
+  assert.match(styles, /\.privacy-strip/);
+  assert.match(styles, /\.action-ribbon/);
+});
