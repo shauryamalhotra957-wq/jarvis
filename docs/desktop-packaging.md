@@ -67,7 +67,7 @@ Installation is never automatic. The script only creates a shortcut in the curre
 
 ### No installed recognizer
 
-Install an English speech pack in Windows Settings under **Time & language → Speech**, then retry.
+Install an English speech pack in Windows Settings under **Time & language -> Speech**, then retry.
 
 ### Microphone unavailable
 
@@ -87,6 +87,6 @@ Then send a test wake event:
 Invoke-RestMethod http://127.0.0.1:4374/api/wake -Method Post
 ```
 
-## Native Packaging Next
+## Packaging Boundary
 
-The companion closes the wake-to-screen gap without pretending a background browser tab has OS privileges. A signed Tauri or Electron tray package remains the next distribution step for automatic updates, a transparent overlay, secure secrets, and richer permissions-aware tools.
+The shipped PowerShell companion is the supported no-admin wake-to-screen implementation. A signed Tauri or Electron wrapper would be optional distribution packaging for automatic updates or a tray icon; it is not required for voice activation, foregrounding, or the cinematic interface.
