@@ -5,8 +5,10 @@ const STOP_WORDS = new Set(["the", "and", "about", "show", "tell", "give", "me",
 
 export function normalizeQuery(query) {
   return String(query || "")
+    .normalize("NFKD")
+    .replace(/\p{M}/gu, "")
     .toLowerCase()
-    .replace(/[^a-z0-9\s.-]/g, " ")
+    .replace(/[^\p{L}\p{N}\s.-]/gu, " ")
     .replace(/\s+/g, " ")
     .trim();
 }
@@ -32,7 +34,7 @@ export function scoreTokens(tokens, candidateTerms, query = "") {
 
 export function findLocation(query) {
   const normalized = normalizeQuery(query);
-  const coordinate = parseCoordinates(normalized);
+  const coordinate = parseCoordinates(query);
   if (coordinate) {
     const nearest = nearestLocation(coordinate.lat, coordinate.lon);
     return {
@@ -63,6 +65,15 @@ export function findTopic(query) {
     }))
     .sort((a, b) => b.score - a.score);
   return ranked[0]?.score > 0 ? ranked[0].topic : null;
+}
+
+export function selectSatellite(query, candidates = satellites) {
+  if (!candidates.length) return null;
+  let hash = 2166136261;
+  for (const character of normalizeQuery(query)) {
+    hash = Math.imul(hash ^ character.codePointAt(0), 16777619);
+  }
+  return candidates[(hash >>> 0) % candidates.length];
 }
 
 function locationAnswer(location, topic) {
@@ -148,7 +159,7 @@ function globalScanAnswer(query) {
 
 export function answerQuery(query, options = {}) {
   const normalized = normalizeQuery(query);
-  const location = findLocation(normalized);
+  const location = findLocation(query);
   const topic = findTopic(normalized);
   const wantsSatellite = /\b(satellite|orbit|scan|track|pointer|iss|landsat|sentinel)\b/i.test(normalized);
 
@@ -158,7 +169,7 @@ export function answerQuery(query, options = {}) {
   else answer = globalScanAnswer(normalized);
 
   if (wantsSatellite) {
-    const satellite = satellites[Math.abs(normalized.length) % satellites.length];
+    const satellite = selectSatellite(normalized);
     answer.sections = [
       {
         heading: "Satellite pointer",

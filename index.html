@@ -4,7 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#02111f" />
-    <title>JARVIS</title>
+    <meta name="description" content="A cinematic, local-first JARVIS command interface with wake-word control, personal memory, and orbital intelligence." />
+    <title>JARVIS // Personal Intelligence System</title>
   </head>
   <body>
     <div id="app">
@@ -15,7 +16,46 @@
           <strong>Orbital systems waking</strong>
         </div>
       </div>
+      <section id="wakePortal" class="wake-portal" aria-label="JARVIS wake interface">
+        <div class="portal-noise" aria-hidden="true"></div>
+        <div class="portal-corners" aria-hidden="true"></div>
+        <div class="portal-console">
+          <span class="portal-kicker">PERSONAL INTELLIGENCE MATRIX // STANDBY</span>
+          <button id="wakeEnterButton" class="portal-reactor" type="button" aria-label="Enter JARVIS interface manually">
+            <span class="reactor-ring ring-a"></span>
+            <span class="reactor-ring ring-b"></span>
+            <span class="reactor-ring ring-c"></span>
+            <span class="reactor-heart"></span>
+          </button>
+          <h1>J.A.R.V.I.S.</h1>
+          <p id="wakeStatus">Interface dormant. Arm the wake channel or enter manually.</p>
+          <div class="voice-wave" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <strong id="wakeTranscript" aria-live="polite">AWAITING AUTHORIZED VOICE PRINT</strong>
+          <div class="portal-actions">
+            <button id="portalArmButton" type="button">ARM WAKE CHANNEL</button>
+            <button id="portalEnterButton" type="button">ENTER MANUALLY</button>
+          </div>
+          <small>Browser wake mode works while this page is open and microphone permission is granted. The desktop companion supports local system-level activation.</small>
+        </div>
+      </section>
       <main class="cockpit" aria-label="JARVIS">
+        <header class="system-header" aria-label="System overview">
+          <div class="header-brand">
+            <span>J.A.R.V.I.S.</span>
+            <strong>PERSONAL INTELLIGENCE SYSTEM</strong>
+          </div>
+          <div class="header-mission">
+            <i></i>
+            <span>MISSION STATE</span>
+            <strong id="missionState">STANDBY</strong>
+          </div>
+          <div class="header-clock">
+            <span id="dateReadout">SYSTEM DATE</span>
+            <strong id="localClock">00:00:00</strong>
+          </div>
+        </header>
         <section class="globe-stage" aria-label="Interactive globe">
           <div id="globeMount" class="globe-mount"></div>
           <div id="scanSweep" class="scan-sweep" aria-hidden="true"></div>
@@ -42,6 +82,10 @@
             <div><span>GLOBE</span><strong id="globeState">TRACKING</strong></div>
             <div><span>SAT</span><strong id="satState">ACTIVE</strong></div>
             <div><span>VOICE</span><strong id="voiceState">STANDBY</strong></div>
+          </div>
+          <div class="privacy-strip">
+            <div><span>WAKE CHANNEL</span><strong id="privacyState">MIC OFF</strong></div>
+            <div><span>LOCAL MEMORY</span><strong id="memoryCount">0 NOTES</strong></div>
           </div>
           <div class="telemetry-card" aria-label="Current target lock">
             <span>TARGET LOCK</span>
@@ -96,12 +140,13 @@
             <button class="send-button" type="submit" title="Execute command">EXECUTE</button>
           </form>
           <button id="micButton" class="tool-button" title="Voice command" aria-pressed="false">MIC</button>
+          <button id="wakeButton" class="tool-button wake-button" title="Arm the Jarvis wake word" aria-pressed="false">ARM JARVIS</button>
           <button id="speakButton" class="tool-button active" title="Toggle voice output" aria-pressed="true">VOICE</button>
           <div class="quick-chips" aria-label="Quick commands">
-            <button type="button" data-command="run a global satellite scan">Global scan</button>
-            <button type="button" data-command="show me Delhi infrastructure and risk">Delhi</button>
-            <button type="button" data-command="explain cybersecurity threat level">Cyber</button>
-            <button type="button" data-command="focus on Pacific ocean climate signals">Ocean</button>
+            <button type="button" data-command="give me my daily brief">Daily brief</button>
+            <button type="button" data-command="run a global satellite scan">Orbital scan</button>
+            <button type="button" data-command="run system diagnostics">Diagnostics</button>
+            <button type="button" data-command="what do you remember">Memory</button>
           </div>
           <div class="mode-dock" aria-label="Globe visual mode">
             <button type="button" class="active" data-mode="earth" aria-pressed="true">EARTH</button>

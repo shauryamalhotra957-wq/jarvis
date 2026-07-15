@@ -12,6 +12,11 @@
 - Quick command chips.
 - Voice output toggle.
 - Speech recognition button where browser-supported.
+- Dormant reactor portal with manual and wake-channel authorization.
+- Continuous browser wake mode with direct-command and follow-up-command flows.
+- Visible microphone privacy, wake state, local-memory count, and desktop bridge state.
+- Live mission clock and system state header.
+- Clickable next-action ribbon in structured answers.
 - Keyboard shortcut: `Ctrl+J` or `Cmd+J` focuses the command channel.
 
 ## Globe
@@ -46,7 +51,21 @@
 - Scan progress state.
 - Reduced-motion-safe interface path.
 - Production integration guidance.
+- Local personal notes with explicit `remember` commands.
+- Daily brief from local time and saved personal context.
+- Local time, date, and diagnostic routes.
+- Persistent bounded command and personal-memory stores with failure-safe fallbacks.
 
-## Future Features
+## Desktop Companion
+
+- Loopback-only Node static server.
+- Server-Sent Events wake bridge.
+- Windows `System.Speech` phrase-limited recognizer.
+- Edge app-window launch and foreground activation.
+- Confidence threshold and cooldown controls.
+- Opt-in per-user Startup shortcut installer and remover.
+- No arbitrary spoken shell execution.
+
+## Extension Surface
 
 The architecture can support thousands of feature modules because commands are routed through data-driven topics and locations. Add new capabilities by adding topics, tools, and live data adapters.

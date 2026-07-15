@@ -1,10 +1,11 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { locations } from "./data/worldIntel.js";
+import { resolvePublicAsset } from "./core/assets.js";
 import { latLonToCartesian } from "./core/geo.js";
 
-const EARTH_DAY_TEXTURE_URL = "/assets/earth/world-topo-bathy-5400.jpg";
-const EARTH_NIGHT_TEXTURE_URL = "/assets/earth/earth-night-4096.jpg";
+const EARTH_DAY_TEXTURE_URL = resolvePublicAsset("assets/earth/world-topo-bathy-5400.jpg", import.meta.env.BASE_URL);
+const EARTH_NIGHT_TEXTURE_URL = resolvePublicAsset("assets/earth/earth-night-4096.jpg", import.meta.env.BASE_URL);
 
 function seededRandom(seed) {
   let state = seed;

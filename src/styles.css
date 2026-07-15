@@ -22,6 +22,12 @@
   box-sizing: border-box;
 }
 
+html {
+  background: var(--bg);
+  color-scheme: dark;
+  scrollbar-color: rgba(77, 243, 255, 0.42) var(--bg);
+}
+
 body {
   margin: 0;
   min-width: 320px;
@@ -31,6 +37,16 @@ body {
     radial-gradient(circle at 50% 48%, rgba(19, 122, 255, 0.2), transparent 32%),
     radial-gradient(circle at 20% 18%, rgba(77, 243, 255, 0.1), transparent 24%),
     #020a12;
+}
+
+body::-webkit-scrollbar {
+  width: 0.55rem;
+  background: var(--bg);
+}
+
+body::-webkit-scrollbar-thumb {
+  border: 2px solid var(--bg);
+  background: rgba(77, 243, 255, 0.48);
 }
 
 button,
@@ -480,15 +496,15 @@ body.is-executing .scan-sweep {
 }
 
 .confidence-row {
-  position: sticky;
-  bottom: 0;
+  position: relative;
+  bottom: auto;
   display: grid;
   grid-template-columns: auto 1fr auto;
   gap: 0.7rem;
   align-items: center;
   margin-top: 1rem;
   padding: 0.8rem 0 0;
-  background: linear-gradient(to top, rgba(3, 14, 25, 0.96), rgba(3, 14, 25, 0));
+  background: linear-gradient(to right, rgba(77, 243, 255, 0.06), transparent);
 }
 
 meter {
@@ -949,4 +965,488 @@ body[data-globe-mode="tactical"] .mode-dock button.active {
   .scan-sweep {
     display: none;
   }
+}
+
+/* Cinematic personal-intelligence shell */
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  pointer-events: none;
+  opacity: 0.22;
+  background: repeating-linear-gradient(180deg, transparent 0 3px, rgba(109, 236, 255, 0.045) 4px);
+  mix-blend-mode: screen;
+}
+
+.system-header {
+  position: fixed;
+  z-index: 28;
+  top: 0.85rem;
+  left: 1rem;
+  right: 1rem;
+  min-height: 3.75rem;
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) auto minmax(220px, 1fr);
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.55rem 1.15rem;
+  border-top: 1px solid rgba(77, 243, 255, 0.3);
+  border-bottom: 1px solid rgba(77, 243, 255, 0.16);
+  background: linear-gradient(90deg, rgba(2, 9, 17, 0.94), rgba(7, 31, 43, 0.72), rgba(2, 9, 17, 0.94));
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35), inset 0 -1px rgba(77, 243, 255, 0.08);
+  backdrop-filter: blur(18px);
+  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+}
+
+.header-brand,
+.header-mission,
+.header-clock {
+  display: grid;
+  gap: 0.18rem;
+}
+
+.header-brand span,
+.header-mission span,
+.header-clock span {
+  color: var(--muted);
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.19em;
+}
+
+.header-brand strong {
+  color: var(--cyan);
+  font-size: 0.86rem;
+  letter-spacing: 0.1em;
+}
+
+.header-mission {
+  grid-template-columns: auto auto;
+  column-gap: 0.55rem;
+  align-items: center;
+  text-align: center;
+}
+
+.header-mission i {
+  grid-row: 1 / 3;
+  width: 0.55rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 18px var(--green);
+  animation: missionPulse 1.8s ease-in-out infinite;
+}
+
+.header-mission strong {
+  color: var(--white);
+  font-size: 0.76rem;
+  letter-spacing: 0.17em;
+}
+
+.header-clock {
+  justify-items: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.header-clock strong {
+  color: var(--white);
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 1.05rem;
+  letter-spacing: 0.12em;
+}
+
+.cockpit {
+  padding-top: 5.25rem;
+}
+
+.globe-stage,
+.hud-panel {
+  height: calc(100svh - 13rem);
+}
+
+.globe-stage {
+  clip-path: polygon(24px 0, calc(100% - 24px) 0, 100% 24px, 100% calc(100% - 24px), calc(100% - 24px) 100%, 24px 100%, 0 calc(100% - 24px), 0 24px);
+  background: radial-gradient(circle at center, rgba(16, 95, 122, 0.08), rgba(1, 8, 15, 0.35));
+}
+
+.hud-panel {
+  border-color: rgba(77, 243, 255, 0.34);
+  background:
+    linear-gradient(120deg, rgba(77, 243, 255, 0.12), transparent 23%),
+    repeating-linear-gradient(180deg, transparent 0 31px, rgba(77, 243, 255, 0.025) 32px),
+    rgba(2, 14, 25, 0.78);
+}
+
+.privacy-strip {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin: 0.65rem 0;
+}
+
+.privacy-strip div {
+  min-width: 0;
+  padding: 0.62rem;
+  border: 1px solid rgba(77, 243, 255, 0.16);
+  background: rgba(1, 11, 20, 0.58);
+}
+
+.privacy-strip span,
+.action-ribbon > span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.6rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
+
+.privacy-strip strong {
+  display: block;
+  margin-top: 0.3rem;
+  color: var(--white);
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  overflow-wrap: anywhere;
+}
+
+.privacy-strip strong[data-armed="true"] {
+  color: var(--green);
+  text-shadow: 0 0 12px rgba(77, 255, 195, 0.42);
+}
+
+.action-ribbon {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.45rem;
+  margin-top: 0.8rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid rgba(77, 243, 255, 0.18);
+}
+
+.action-ribbon > span {
+  grid-column: 1 / -1;
+}
+
+.action-ribbon button,
+.portal-actions button {
+  min-height: 2.45rem;
+  border: 1px solid rgba(77, 243, 255, 0.3);
+  color: var(--cyan);
+  background: rgba(5, 31, 45, 0.82);
+  font-size: 0.66rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: 160ms ease;
+}
+
+.action-ribbon button:hover,
+.action-ribbon button:focus-visible,
+.portal-actions button:hover,
+.portal-actions button:focus-visible {
+  color: #02111f;
+  border-color: var(--green);
+  background: var(--green);
+  box-shadow: 0 0 24px rgba(77, 255, 195, 0.32);
+  outline: none;
+}
+
+.taskbar {
+  grid-template-columns: auto minmax(250px, 1fr) auto auto auto minmax(210px, auto) minmax(205px, auto);
+  background:
+    linear-gradient(90deg, rgba(77, 243, 255, 0.08), transparent 28%, rgba(77, 255, 195, 0.06)),
+    rgba(2, 13, 24, 0.9);
+}
+
+.wake-button.active {
+  color: #02111f;
+  border-color: var(--green);
+  background: linear-gradient(135deg, var(--green), var(--cyan));
+  box-shadow: 0 0 24px rgba(77, 255, 195, 0.36);
+}
+
+.wake-portal {
+  position: fixed;
+  inset: 0;
+  z-index: 74;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 48%, rgba(32, 195, 218, 0.19), transparent 23%),
+    radial-gradient(circle at 50% 48%, rgba(0, 0, 0, 0) 0 32%, rgba(0, 5, 11, 0.88) 68%),
+    #01060b;
+  transition: opacity 520ms ease, visibility 520ms ease;
+}
+
+body.jarvis-dormant .wake-portal {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+body.jarvis-dormant .cockpit {
+  opacity: 0.16;
+  filter: blur(2px) saturate(0.5);
+  transform: scale(0.985);
+  pointer-events: none;
+}
+
+body.jarvis-awake .cockpit {
+  animation: interfaceWake 850ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.portal-noise {
+  position: absolute;
+  inset: -20%;
+  opacity: 0.38;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 79px, rgba(77, 243, 255, 0.06) 80px),
+    repeating-linear-gradient(0deg, transparent 0 79px, rgba(77, 243, 255, 0.05) 80px);
+  transform: perspective(700px) rotateX(62deg) translateY(28%);
+  animation: portalGrid 14s linear infinite;
+}
+
+.portal-corners {
+  position: absolute;
+  inset: 2.2rem;
+  pointer-events: none;
+  border: 1px solid rgba(77, 243, 255, 0.11);
+  clip-path: polygon(0 0, 13% 0, 13% 1px, 87% 1px, 87% 0, 100% 0, 100% 13%, calc(100% - 1px) 13%, calc(100% - 1px) 87%, 100% 87%, 100% 100%, 87% 100%, 87% calc(100% - 1px), 13% calc(100% - 1px), 13% 100%, 0 100%, 0 87%, 1px 87%, 1px 13%, 0 13%);
+}
+
+.portal-console {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  justify-items: center;
+  width: min(46rem, 100%);
+  text-align: center;
+}
+
+.portal-kicker {
+  color: var(--green);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.28em;
+}
+
+.portal-reactor {
+  position: relative;
+  width: clamp(12rem, 22vw, 17rem);
+  aspect-ratio: 1;
+  margin: 1.2rem 0 0.6rem;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  background: radial-gradient(circle, rgba(235, 255, 255, 0.98) 0 5%, #54f6ff 6% 10%, rgba(30, 163, 213, 0.34) 11% 28%, transparent 29%);
+  filter: drop-shadow(0 0 28px rgba(77, 243, 255, 0.52));
+}
+
+.reactor-ring,
+.reactor-heart {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.reactor-ring {
+  border: 1px solid rgba(77, 243, 255, 0.5);
+}
+
+.ring-a {
+  width: 94%;
+  border-width: 2px;
+  border-style: dashed;
+  animation: ringSpin 18s linear infinite;
+}
+
+.ring-b {
+  width: 72%;
+  border-width: 7px;
+  border-color: rgba(77, 243, 255, 0.78);
+  border-left-color: transparent;
+  border-right-color: var(--green);
+  animation: reverseSpin 8s linear infinite;
+}
+
+.ring-c {
+  width: 49%;
+  border-width: 2px;
+  border-color: rgba(223, 252, 255, 0.9);
+  box-shadow: 0 0 24px rgba(77, 243, 255, 0.72), inset 0 0 24px rgba(77, 243, 255, 0.45);
+  animation: reactorBreath 2.4s ease-in-out infinite;
+}
+
+.reactor-heart {
+  width: 18%;
+  background: #eaffff;
+  box-shadow: 0 0 16px #eaffff, 0 0 44px var(--cyan), 0 0 90px var(--blue);
+}
+
+.portal-console h1 {
+  margin: 0;
+  color: var(--white);
+  font-size: clamp(2rem, 6vw, 4.4rem);
+  font-weight: 300;
+  letter-spacing: 0.24em;
+  text-indent: 0.24em;
+  text-shadow: 0 0 28px rgba(77, 243, 255, 0.42);
+}
+
+.portal-console p {
+  max-width: 38rem;
+  margin: 0.7rem 0 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.voice-wave {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.32rem;
+  height: 3rem;
+  margin-top: 0.7rem;
+}
+
+.voice-wave i {
+  display: block;
+  width: 2px;
+  height: 18%;
+  background: var(--cyan);
+  box-shadow: 0 0 10px var(--cyan);
+  animation: voiceWave 1.1s ease-in-out infinite alternate;
+}
+
+.voice-wave i:nth-child(2n) { animation-delay: -0.45s; }
+.voice-wave i:nth-child(3n) { animation-delay: -0.8s; }
+.voice-wave i:nth-child(5n) { animation-delay: -0.2s; }
+
+.portal-console > strong {
+  color: var(--cyan);
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+}
+
+.portal-actions {
+  display: flex;
+  gap: 0.65rem;
+  margin-top: 1.15rem;
+}
+
+.portal-actions button {
+  min-width: 12rem;
+  padding: 0 1rem;
+}
+
+.portal-console small {
+  display: block;
+  max-width: 38rem;
+  margin-top: 1rem;
+  color: rgba(138, 180, 199, 0.72);
+  font-size: 0.7rem;
+  line-height: 1.5;
+}
+
+@keyframes missionPulse {
+  50% { opacity: 0.45; transform: scale(0.75); }
+}
+
+@keyframes reverseSpin {
+  to { transform: translate(-50%, -50%) rotate(-360deg); }
+}
+
+@keyframes ringSpin {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes reactorBreath {
+  50% { opacity: 0.55; transform: translate(-50%, -50%) scale(0.88); }
+}
+
+@keyframes voiceWave {
+  to { height: 88%; background: var(--green); }
+}
+
+@keyframes portalGrid {
+  to { background-position: 80px 0, 0 80px; }
+}
+
+@keyframes interfaceWake {
+  from { opacity: 0.12; filter: blur(5px) saturate(0.3); transform: scale(0.97); }
+  to { opacity: 1; filter: none; transform: scale(1); }
+}
+
+@media (max-width: 1380px) {
+  .taskbar {
+    grid-template-columns: auto minmax(220px, 1fr) repeat(3, auto);
+  }
+
+  .quick-chips,
+  .mode-dock {
+    display: none;
+  }
+}
+
+@media (max-width: 1180px) {
+  .cockpit {
+    padding-top: 5.3rem;
+  }
+
+  .globe-stage,
+  .hud-panel {
+    height: auto;
+  }
+
+  .system-header {
+    position: absolute;
+  }
+}
+
+@media (max-width: 720px) {
+  .system-header {
+    left: 0.75rem;
+    right: 0.75rem;
+    grid-template-columns: 1fr auto;
+    gap: 0.75rem;
+  }
+
+  .header-mission {
+    display: none;
+  }
+
+  .header-brand strong {
+    font-size: 0.68rem;
+  }
+
+  .header-clock strong {
+    font-size: 0.84rem;
+  }
+
+  .taskbar {
+    grid-template-areas:
+      "reactor form form"
+      "mic wake voice";
+    grid-template-columns: auto minmax(0, 1fr) minmax(4.5rem, auto);
+  }
+
+  #wakeButton { grid-area: wake; }
+
+  .portal-corners { inset: 0.7rem; }
+  .portal-console h1 { font-size: 2rem; }
+  .portal-kicker { font-size: 0.55rem; letter-spacing: 0.16em; }
+  .portal-actions { width: 100%; flex-direction: column; }
+  .portal-actions button { width: 100%; }
+  .action-ribbon { grid-template-columns: 1fr; }
+  .privacy-strip { grid-template-columns: 1fr; }
 }
