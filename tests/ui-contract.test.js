@@ -21,6 +21,11 @@ test("visual modes are wired into the globe renderer", () => {
   assert.match(globe, /displayMode/);
 });
 
+test("Earth textures respect the configured deployment base", () => {
+  assert.match(globe, /import\.meta\.env\.BASE_URL/);
+  assert.match(globe, /resolvePublicAsset/);
+});
+
 test("motion-heavy interface has a reduced-motion path", () => {
   assert.match(styles, /prefers-reduced-motion:\s*reduce/);
   assert.match(main, /appState\.motionReduced/);
