@@ -27,7 +27,7 @@ export function distanceKm(a, b) {
   const h =
     Math.sin(dLat / 2) ** 2 +
     Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) ** 2;
-  return 2 * earthRadiusKm * Math.asin(Math.sqrt(h));
+  return 2 * earthRadiusKm * Math.asin(Math.sqrt(clamp(h, 0, 1)));
 }
 
 export function validCoordinate(location) {
