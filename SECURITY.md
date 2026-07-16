@@ -9,7 +9,7 @@ This app is a local prototype. Its deterministic command and memory routes do no
 - Browser voice recognition is activated only after pressing the mic button or explicitly arming the wake channel.
 - Continuous browser wake mode exposes visible armed/listening state and can be disarmed at any time.
 - The Windows wake companion uses a phrase-limited installed speech recognizer and does not save audio.
-- The desktop bridge binds only to `127.0.0.1`, contains static paths inside `dist`, and exposes no command-execution endpoint.
+- The desktop bridge binds only to `127.0.0.1`, contains static paths inside `dist`, rejects cross-origin wake requests, and exposes no command-execution endpoint.
 - Personal notes are stored in origin-scoped `localStorage`, are bounded in length/count, and are never treated as executable input.
 - Speech synthesis can be muted.
 - Commands are treated as input, not executable code.

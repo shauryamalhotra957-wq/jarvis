@@ -37,6 +37,22 @@ test("desktop server exposes health, wake, and static app routes", async (contex
   assert.equal(wake.status, 202);
   assert.equal((await wake.json()).status, "accepted");
 
+  const blockedWake = await fetch(`${base}/api/wake`, {
+    method: "POST",
+    headers: {
+      Origin: "https://untrusted.example",
+      "Sec-Fetch-Site": "cross-site"
+    }
+  });
+  assert.equal(blockedWake.status, 403);
+  assert.equal((await blockedWake.json()).error, "untrusted_origin");
+
+  const sameOriginWake = await fetch(`${base}/api/wake`, {
+    method: "POST",
+    headers: { Origin: base }
+  });
+  assert.equal(sameOriginWake.status, 202);
+
   const app = await fetch(`${base}/mission/brief`).then((response) => response.text());
   assert.match(app, /JARVIS test/);
 });
