@@ -136,7 +136,18 @@
           </button>
           <form id="commandForm" class="command-form">
             <label class="sr-only" for="commandInput">Ask JARVIS</label>
-            <input id="commandInput" autocomplete="off" value="show me satellite intel over Tokyo" placeholder="Ask: track satellites over India, scan climate risks, show London, explain arc reactor..." />
+            <div class="command-input-shell">
+              <input
+                id="commandInput"
+                autocomplete="off"
+                aria-describedby="commandHint"
+                value="show me satellite intel over Tokyo"
+                placeholder="Ask: track satellites over India, scan climate risks, show London, explain arc reactor..."
+              />
+              <span id="commandHint" class="command-hint" aria-live="polite">
+                <kbd>Ctrl J</kbd> focus · <kbd>↑</kbd><kbd>↓</kbd> command history
+              </span>
+            </div>
             <button class="send-button" type="submit" title="Execute command">EXECUTE</button>
           </form>
           <button id="micButton" class="tool-button" title="Voice command" aria-pressed="false">MIC</button>

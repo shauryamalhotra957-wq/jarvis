@@ -1,7 +1,12 @@
 import "./styles.css";
 import "./experience.css";
 import { answerQuery, bootAnswer } from "./core/assistantCore.js";
-import { addCommand, loadCommandHistory, saveCommandHistory } from "./core/commandHistory.js";
+import {
+  addCommand,
+  loadCommandHistory,
+  navigateCommandHistory,
+  saveCommandHistory
+} from "./core/commandHistory.js";
 import {
   addMemoryNote,
   loadPersonalMemory,
@@ -28,6 +33,7 @@ const elements = {
   tooltip: document.querySelector("#worldTooltip"),
   form: document.querySelector("#commandForm"),
   input: document.querySelector("#commandInput"),
+  commandHint: document.querySelector("#commandHint"),
   answerTitle: document.querySelector("#answerTitle"),
   answerSummary: document.querySelector("#answerSummary"),
   answerSections: document.querySelector("#answerSections"),
@@ -71,6 +77,8 @@ const appState = {
   globe: null,
   stream: [],
   commandHistory: initialCommandHistory,
+  historyCursor: -1,
+  commandDraft: initialCommandHistory[0] || DEFAULT_COMMAND,
   personalMemory: initialPersonalMemory,
   wakeState: { ...DEFAULT_WAKE_STATE },
   recognitionActive: false,
@@ -322,6 +330,8 @@ function executeCommand(command, options = {}) {
   wakeInterface("Command channel active.", finalCommand);
   appState.lastCommand = finalCommand;
   appState.commandHistory = addCommand(appState.commandHistory, finalCommand);
+  appState.historyCursor = -1;
+  appState.commandDraft = finalCommand;
   saveCommandHistory(storage, appState.commandHistory);
   renderCommandMemory();
   elements.input.value = finalCommand;
@@ -492,6 +502,29 @@ function bindEvents() {
   elements.form.addEventListener("submit", (event) => {
     event.preventDefault();
     executeCommand(elements.input.value);
+  });
+  elements.input.addEventListener("input", () => {
+    appState.historyCursor = -1;
+    appState.commandDraft = elements.input.value;
+    elements.commandHint.textContent = "Ctrl J focus · ↑↓ command history";
+  });
+  elements.input.addEventListener("keydown", (event) => {
+    if (!["ArrowUp", "ArrowDown"].includes(event.key) || event.altKey || event.ctrlKey || event.metaKey) return;
+    event.preventDefault();
+    if (appState.historyCursor === -1) appState.commandDraft = elements.input.value;
+    const direction = event.key === "ArrowUp" ? "older" : "newer";
+    const next = navigateCommandHistory(
+      appState.commandHistory,
+      appState.historyCursor,
+      direction,
+      appState.commandDraft
+    );
+    appState.historyCursor = next.cursor;
+    elements.input.value = next.value;
+    elements.input.setSelectionRange(next.value.length, next.value.length);
+    elements.commandHint.textContent = next.cursor === -1
+      ? "Draft restored · ↑ returns to command history"
+      : `Command ${next.cursor + 1} of ${appState.commandHistory.length} · Enter to execute`;
   });
   elements.reactorButton.addEventListener("click", () => executeCommand(appState.lastCommand, { includeBootSignals: true }));
   elements.micButton.addEventListener("click", toggleSpeechRecognition);

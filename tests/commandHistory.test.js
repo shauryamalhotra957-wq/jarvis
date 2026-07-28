@@ -4,6 +4,7 @@ import {
   COMMAND_HISTORY_KEY,
   addCommand,
   loadCommandHistory,
+  navigateCommandHistory,
   saveCommandHistory
 } from "../src/core/commandHistory.js";
 
@@ -38,4 +39,26 @@ test("command history round-trips through storage", () => {
 test("loadCommandHistory falls back when storage is unavailable or invalid", () => {
   assert.deepEqual(loadCommandHistory(null, ["standby"]), ["standby"]);
   assert.deepEqual(loadCommandHistory(memoryStorage("not-json"), ["standby"]), ["standby"]);
+});
+
+test("command history navigation preserves and restores the current draft", () => {
+  const history = ["latest scan", "prior briefing", "system check"];
+  let navigation = navigateCommandHistory(history, -1, "older", "unfinished command");
+  assert.deepEqual(navigation, { cursor: 0, value: "latest scan" });
+
+  navigation = navigateCommandHistory(history, navigation.cursor, "older", "unfinished command");
+  assert.deepEqual(navigation, { cursor: 1, value: "prior briefing" });
+
+  navigation = navigateCommandHistory(history, navigation.cursor, "newer", "unfinished command");
+  assert.deepEqual(navigation, { cursor: 0, value: "latest scan" });
+
+  navigation = navigateCommandHistory(history, navigation.cursor, "newer", "unfinished command");
+  assert.deepEqual(navigation, { cursor: -1, value: "unfinished command" });
+});
+
+test("command history navigation clamps at the oldest command", () => {
+  assert.deepEqual(
+    navigateCommandHistory(["one", "two"], 1, "older", ""),
+    { cursor: 1, value: "two" }
+  );
 });

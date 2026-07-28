@@ -54,6 +54,14 @@ test("command memory is restored and persisted locally", () => {
   assert.match(main, /elements\.input\.value = appState\.lastCommand/);
 });
 
+test("command input exposes keyboard-first history recall", () => {
+  assert.match(html, /id="commandInput"[\s\S]*aria-describedby="commandHint"/);
+  assert.match(html, /id="commandHint"[^>]*aria-live="polite"/);
+  assert.match(main, /navigateCommandHistory\(/);
+  assert.match(main, /"ArrowUp", "ArrowDown"/);
+  assert.match(styles, /\.command-hint/);
+});
+
 test("speech controls handle unavailable and repeated interactions", () => {
   assert.match(main, /elements\.speakButton\.disabled = true/);
   assert.match(main, /function toggleSpeechRecognition/);
