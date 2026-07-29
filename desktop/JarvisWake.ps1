@@ -76,7 +76,6 @@ function Show-Jarvis {
     Select-Object -First 1
 
   if ($window -and $shell.AppActivate($window.Id)) {
-    # Existing app window is now in the foreground.
   } else {
     $edge = Find-Edge
     if ($edge) {
