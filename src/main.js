@@ -11,6 +11,8 @@ import {
 import { DEFAULT_WAKE_STATE, reduceWakeState } from "./core/wakeWord.js";
 import { startupSignals } from "./data/worldIntel.js";
 import { JarvisGlobe } from "./globe.js";
+import { AudioTelemetryEngine } from "./core/audioTelemetry.js";
+import { SystemTelemetry } from "./core/systemTelemetry.js";
 
 const DEFAULT_COMMAND = "show me satellite intel over Tokyo";
 const storage = (() => {
@@ -578,6 +580,19 @@ function init() {
   renderAnswer(bootAnswer());
   elements.missionState.textContent = "STANDBY";
   setupDesktopWakeBridge();
+
+  const systemMetrics = new SystemTelemetry();
+  function telemetryLoop(now) {
+    const metrics = systemMetrics.tick(now);
+    if (appState.speaking) {
+      const wave = AudioTelemetryEngine.generateSynthesizedWaveform(now / 1000, 3.5);
+      document.documentElement.style.setProperty("--reactor-pulse", `${1 + wave.bass * 0.4}`);
+    } else {
+      document.documentElement.style.setProperty("--reactor-pulse", "1");
+    }
+    window.requestAnimationFrame(telemetryLoop);
+  }
+  window.requestAnimationFrame(telemetryLoop);
 }
 
 init();
