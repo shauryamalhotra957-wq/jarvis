@@ -1,5 +1,8 @@
 # JARVIS
 
+[![CI](https://github.com/shauryamalhotra957-wq/jarvis/actions/workflows/ci.yml/badge.svg)](https://github.com/shauryamalhotra957-wq/jarvis/actions) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+
 JARVIS is a cinematic personal-intelligence interface built around a high-resolution interactive Earth, wake-word activation, local personal memory, satellite-style target locks, a glowing arc-reactor command portal, voice-capable commands, and a deterministic local response engine.
 
 The project is designed to feel like an advanced mission-control assistant: ask a question, select a region on the globe, or trigger a scan, and JARVIS overlays structured information with smooth motion, live telemetry, and a cinematic blue interface.
