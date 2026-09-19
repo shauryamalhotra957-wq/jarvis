@@ -967,7 +967,6 @@ body[data-globe-mode="tactical"] .mode-dock button.active {
   }
 }
 
-/* Cinematic personal-intelligence shell */
 
 body::before {
   content: "";
