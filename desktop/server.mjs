@@ -56,6 +56,22 @@ function sendJson(response, status, value) {
   response.end(JSON.stringify(value));
 }
 
+export function isTrustedWakeRequest(request) {
+  const fetchSite = String(request.headers["sec-fetch-site"] || "").toLowerCase();
+  if (fetchSite === "cross-site") return false;
+
+  const origin = request.headers.origin;
+  if (!origin) return true;
+
+  try {
+    const parsed = new URL(origin);
+    const host = String(request.headers.host || "").trim().toLowerCase();
+    return ["http:", "https:"].includes(parsed.protocol) && Boolean(host) && parsed.host.toLowerCase() === host;
+  } catch {
+    return false;
+  }
+}
+
 export function createJarvisServer(options = {}) {
   const root = resolve(options.root || join(fileURLToPath(new URL("..", import.meta.url)), "dist"));
   const hub = options.hub || createWakeHub();
@@ -80,6 +96,10 @@ export function createJarvisServer(options = {}) {
     }
 
     if (request.method === "POST" && url.pathname === "/api/wake") {
+      if (!isTrustedWakeRequest(request)) {
+        sendJson(response, 403, { error: "untrusted_origin" });
+        return;
+      }
       const delivered = hub.broadcast({ source: "desktop", at: new Date().toISOString() });
       sendJson(response, 202, { status: "accepted", delivered });
       return;
