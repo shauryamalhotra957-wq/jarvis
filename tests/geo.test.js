@@ -39,3 +39,12 @@ test("distanceKm returns a plausible long-distance value", () => {
   const km = distanceKm({ lat: 51.5072, lon: -0.1276 }, { lat: 40.7128, lon: -74.006 });
   assert.ok(km > 5500 && km < 5700);
 });
+
+test("distanceKm remains finite for nearly antipodal coordinates", () => {
+  const km = distanceKm(
+    { lat: -64.31623954097512, lon: -166.57524874797355 },
+    { lat: 64.31623952768267, lon: 13.424751230102387 }
+  );
+  assert.equal(Number.isFinite(km), true);
+  assert.ok(km > 20_000 && km < 20_100);
+});
