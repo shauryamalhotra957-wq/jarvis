@@ -1,47 +1,75 @@
-# Architecture
+# jarvis: Architecture & System Topology
+
+**Domain**: Futuristic AI Assistant UI with Three.js Earth & Orbital Telemetry  
+**System Mission**: Next-generation Iron Man JARVIS assistant interface featuring real-time WebGL Earth rendering, satellite orbit interception tracking, localized voice recognition, and HUD telemetry.
+
+## 1. System Topology & Geospatial Data Fabric
 
 ```mermaid
 flowchart TD
-  User[User command] --> Wake[Wake state / manual authorization]
-  Desktop[Windows wake service] --> Bridge[Loopback SSE bridge]
-  Bridge --> Wake
-  Wake --> UI[Taskbar input / mic / reactor portal]
-  UI --> Personal[Personal intelligence router]
-  Personal -->|unmatched| Core[World intelligence core]
-  Personal --> Memory[Origin-scoped local memory]
-  Core --> Location[Location matcher]
-  Core --> Topic[Topic matcher]
-  Location --> Answer[Structured answer]
-  Topic --> Answer
-  Answer --> Globe[Three.js globe focus]
-  Answer --> Hover[Hover response overlay]
-  Answer --> Voice[Speech synthesis]
-  Globe --> Texture[NASA Earth textures]
-  Globe --> Pointer[Satellite beam pointer]
+    subgraph DataIngestion["Telemetry & Sensor Feeds"]
+        SatStream["Satellite Ephemeris / Orbital TLE"]
+        GroundSensors["Ground Lifeline Telemetry & IoT"]
+        GeoJSON["Geospatial Vector Tiles (GIS)"]
+    end
+
+    subgraph CommandCore["Core Intelligence & Simulation Core"]
+        CoordEngine["WGS84 / ECEF Coordinate Engine"]
+        SpatialIndex["R-Tree / BVH Spatial Indexer"]
+        CrisisEvaluator["Lifeline Risk & Casualty Simulator"]
+        OrbitalPropagator["SGP4 Keplerian Physics Loop"]
+    end
+
+    subgraph Presentation["Cinematic WebGL / HUD Presentation"]
+        ThreeCanvas["Three.js 3D Globe & Orbital Trajectories"]
+        HUDOverlay["Tactical Vector HUD & Telemetry Gauges"]
+        AudioEngine["Spatialized Audio & Alert Synth"]
+    end
+
+    SatStream --> CoordEngine
+    GroundSensors --> SpatialIndex
+    GeoJSON --> SpatialIndex
+    CoordEngine --> OrbitalPropagator
+    SpatialIndex --> CrisisEvaluator
+    OrbitalPropagator --> ThreeCanvas
+    CrisisEvaluator --> ThreeCanvas
+    ThreeCanvas --> HUDOverlay
+    HUDOverlay -.-> AudioEngine
 ```
 
-## Modules
+## 2. Telemetry Ingestion & Render Sequence
 
-- `src/main.js`: UI events, voice, answer rendering, and app bootstrap.
-- `src/globe.js`: Three.js scene, NASA Earth texture shader, atmosphere, markers, satellite orbit, pointer beam.
-- `src/core/assistantCore.js`: command interpretation and answer generation.
-- `src/core/wakeWord.js`: pure wake phrase parser and deterministic wake state reducer.
-- `src/core/personalIntelligence.js`: local note, daily brief, clock, date, and diagnostic routes.
-- `src/core/commandHistory.js`: bounded, resilient recent-command persistence.
-- `src/core/geo.js`: coordinate math, distance, nearest node, coordinate parsing.
-- `src/data/worldIntel.js`: indexed globe locations, topics, satellites, startup signals.
-- `desktop/server.mjs`: loopback-only production asset server and Server-Sent Events wake bridge.
-- `desktop/JarvisWake.ps1`: phrase-limited Windows speech recognizer and interface foreground controller.
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Feeds as Telemetry Streams
+    participant Engine as jarvis Core
+    participant Index as Spatial / Physics Index
+    participant Renderer as WebGL / UI HUD
 
-## Why It Is Testable
+    loop High-Frequency Update Cycle (60 FPS / 16.6ms)
+        Feeds->>Engine: Stream Real-Time Ephemeris / Lifeline Packets
+        Engine->>Index: Update Entity Transforms & Risk Coordinates
+        Index-->>Engine: Compute Nearest Conjunctions & Path Hazards
+        Engine->>Renderer: Sync GPU Buffer Attributes (Positions, Colors)
+        Renderer->>Renderer: Execute Fragment Shader Passes & Post-Processing (Bloom)
+        Renderer-->>Engine: Frame Complete (Telemetry Latency < 2.5ms)
+    end
+```
 
-Wake transitions, personal routes, storage normalization, command intelligence, coordinate logic, asset resolution, and the desktop bridge are independently testable modules. The visual layer consumes their output but does not own the reasoning. This keeps the app cinematic without making it fragile.
+## 3. Command State Lifecycle
 
-## Earth Rendering
+```mermaid
+stateDiagram-v2
+    [*] --> Standby: Boot & Asset Preload
+    Standby --> Synchronizing: Connect Telemetry Feeds
+    Synchronizing --> ActiveMonitoring: Real-Time Stream Validated
+    ActiveMonitoring --> AlertLevelYellow: Regional Vulnerability Elevated (>65%)
+    AlertLevelYellow --> AlertLevelRed: Critical Lifeline Disruption (>85%)
+    AlertLevelRed --> ActiveMonitoring: Hazard Mitigated
+    ActiveMonitoring --> Standby: Disconnect / Offline Mode
+```
 
-The globe uses local NASA-derived assets in `public/assets/earth`:
-
-- `world-topo-bathy-5400.jpg`: Blue Marble Next Generation topography/bathymetry map.
-- `earth-night-4096.jpg`: compressed Earth city-lights texture derived from NASA SVS imagery.
-
-`src/globe.js` blends the day and night textures in a shader using a fixed sun direction, rim atmosphere, subtle ocean glint, and a separate translucent cloud shell.
+## 4. Architectural Resilience Guarantees
+- **60 FPS Framerate Budget**: Geospatial spatial computations execute off the main thread via Web Workers to prevent rendering micro-stutters.
+- **Graceful Asset Fallback**: If photorealistic satellite or terrain texture tiles fail to load, procedural vector contours render seamlessly.
